@@ -1,0 +1,4 @@
+ALTER TABLE mood_entry
+  DROP COLUMN IF EXISTS user_id;
+
+DROP TABLE IF EXISTS mood_users;
