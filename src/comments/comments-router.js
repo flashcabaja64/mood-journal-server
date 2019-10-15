@@ -1,13 +1,14 @@
 const express = require('express');
-const paht = require('path');
+const path = require('path');
 const CommentsService = require('./comments-service');
+const { requireAuth } = require('../middleware/jwt-auth')
 
 const commentsRouter = express.Router();
 const bodyParser = express.json();
 
 commentsRouter
   .route('/')
-  .post(bodyParser, (req, res, next) => {
+  .post(requireAuth, bodyParser, (req, res, next) => {
     const { rating, entry_id, text } = req.body;
     const newComment = { rating, entry_id, text, entry_id: req.user.id};
 

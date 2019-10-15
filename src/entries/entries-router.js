@@ -1,5 +1,6 @@
 const express = require('express');
 const EntriesService = require('./entries-service');
+const { requireAuth } = require('../middleware/jwt-auth');
 
 const entriesRouter = express.Router();
 
@@ -17,6 +18,7 @@ entriesRouter
 // Check entry id
 entriesRouter
   .route('/:entry_id')
+  .all(requireAuth)
   .all(checkEntryExists)
   .get((req, res) => {
     res.json(EntriesService.serializeEntry(res.entry))
@@ -24,6 +26,7 @@ entriesRouter
 
 entriesRouter
   .route('/:entry_id/comments/')
+  .all(requireAuth)
   .all(checkEntryExists)
   .get((req, res, next) => {
     EntriesService.getCommentsForEntries(
