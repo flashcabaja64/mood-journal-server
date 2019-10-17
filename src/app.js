@@ -8,6 +8,7 @@ const errorHandler = require('./errorHandler');
 const entriesRouter = require('./entries/entries-router');
 const commentsRouter = require('./comments/comments-router');
 const authRouter = require('./auth/auth-router');
+const userRouter = require('./users/users-router')
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(cors());
 
 app.use('/api/entries', entriesRouter)
 app.use('/api/comments', commentsRouter)
+app.use('/api/users', userRouter)
 app.use('/api/auth', authRouter)
 
 app.get('/', ( req, res ) => {

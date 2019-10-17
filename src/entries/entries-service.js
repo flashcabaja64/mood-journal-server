@@ -65,6 +65,14 @@ const EntriesService = {
       .delete()
   },
 
+  insertEntry(db, newEntry) {
+    return db
+      .insert(newEntry)
+      .into('mood_entries')
+      .returning('*')
+      .then(row => row[0])
+  },
+
   serializeEntries(entry) {
     return entry.map(this.serializeEntry)
   },

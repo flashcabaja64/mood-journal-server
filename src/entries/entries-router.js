@@ -3,6 +3,7 @@ const EntriesService = require('./entries-service');
 const { requireAuth } = require('../middleware/jwt-auth');
 
 const entriesRouter = express.Router();
+const bodyParser = express.json();
 
 // get all data from DB
 entriesRouter
@@ -13,6 +14,29 @@ entriesRouter
         res.json(EntriesService.serializeEntries(entry))
       })
       .catch(next)
+  })
+  .post(bodyParser, (req, res, next) => {
+    const { title, content, duration, mood_type } = req.body
+    const newEntry = { title, content, duration, mood_type }
+    const db = req.app.get('db')
+
+    for (const [key, value] of Object.entries(newEntry)) {
+      if(value == null) {
+        return res.status(400).json({
+          error: `Missing '${key}' in request body`
+        })
+      }
+    }
+
+    newEntry.user_id = req.user.id
+
+  EntriesService.insertEntry(db, newEntry) 
+    .then(entry => {
+      res
+        .status(201)
+        .json(serializeEntries(entry))
+    })
+    .catch(next)
   })
 
 // Check entry id
