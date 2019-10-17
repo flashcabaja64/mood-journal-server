@@ -23,6 +23,14 @@ entriesRouter
   .get((req, res) => {
     res.json(EntriesService.serializeEntry(res.entry))
   })
+  .delete((req, res, next) => {
+    EntriesService.deleteEntry(
+      req.app.get('db'),
+      req.params.id
+    )
+      .then(() => res.status(204).end())
+      .catch(next)
+  })
 
 entriesRouter
   .route('/:entry_id/comments/')

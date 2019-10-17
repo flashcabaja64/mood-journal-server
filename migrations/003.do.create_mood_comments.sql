@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS mood_comments (
+CREATE TABLE mood_comments (
   id SERIAL PRIMARY KEY,
   text TEXT NOT NULL,
   rating INTEGER NOT NULL,

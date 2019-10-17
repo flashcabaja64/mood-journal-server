@@ -9,6 +9,8 @@ const EntriesService = {
         'entry.id',
         'entry.title',
         'entry.content',
+        'entry.duration',
+        'entry.mood_type',
         'entry.date_created',
         ...userFields,
         db.raw(
@@ -56,6 +58,13 @@ const EntriesService = {
       .groupBy('coms.id', 'user.id')
   },
 
+  deleteEntry(db, entry_id) {
+    return db
+      .from('mood_entries')
+      .where({ entry_id })
+      .delete()
+  },
+
   serializeEntries(entry) {
     return entry.map(this.serializeEntry)
   },
@@ -69,6 +78,8 @@ const EntriesService = {
       id: entryData.id,
       title: xss(entryData.title),
       content: xss(entryData.content),
+      duration: entryData.duration,
+      mood_type: xss(entryData.mood_type),
       date_created: entryData.date_created,
       user: entryData.user || {},
       num_of_comments: Number(entryData.num_of_comments) || 0,
