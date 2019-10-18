@@ -9,7 +9,7 @@ userRouter
   .post('/', jsonBodyParser, (req, res, next) => {
     const { full_name, user_name, nickname, password } = req.body;
 
-    for (const field of ['full_name', 'user_name', 'nickname', 'password'])
+    for (const field of ['full_name', 'user_name', 'password'])
       if(!req.body[field])
         return res.status(400).json({error: `Missing ${field} in request body`});
 
