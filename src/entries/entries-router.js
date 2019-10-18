@@ -1,23 +1,27 @@
 const express = require('express');
 const EntriesService = require('./entries-service');
+const path = require('path')
 const { requireAuth } = require('../middleware/jwt-auth');
 
 const entriesRouter = express.Router();
 const bodyParser = express.json();
 
 // get all data from DB
+//validation on the POST request
 entriesRouter
   .route('/')
-  .get((req, res, next) => {
-    EntriesService.getAllEntries(req.app.get('db'))
+  .get(requireAuth, (req, res, next) => {
+    EntriesService.getEntryByUserId(req.app.get('db'), req.user.id)
       .then(entry => {
-        res.json(EntriesService.serializeEntries(entry))
+        res.status(200).json(entry)
       })
       .catch(next)
   })
   .post(bodyParser, (req, res, next) => {
-    const { title, content, duration, mood_type } = req.body
-    const newEntry = { title, content, duration, mood_type }
+    console.log(req.body)
+
+    const { user_id, title, content, duration, mood_type } = req.body
+    const newEntry = { user_id, title, content, duration, mood_type }
     const db = req.app.get('db')
 
     for (const [key, value] of Object.entries(newEntry)) {
@@ -28,13 +32,12 @@ entriesRouter
       }
     }
 
-    newEntry.user_id = req.user.id
-
   EntriesService.insertEntry(db, newEntry) 
     .then(entry => {
       res
         .status(201)
-        .json(serializeEntries(entry))
+        .location(path.posix.join(req.originalUrl + `/${entry.id}`))
+        .json(EntriesService.serializeEntries(entry))
     })
     .catch(next)
   })
@@ -44,14 +47,32 @@ entriesRouter
   .route('/:entry_id')
   .all(requireAuth)
   .all(checkEntryExists)
-  .get((req, res) => {
+  .get((req, res, next) => {
     res.json(EntriesService.serializeEntry(res.entry))
   })
   .delete((req, res, next) => {
+    const { entry_id } = req.params
     EntriesService.deleteEntry(
       req.app.get('db'),
-      req.params.id
+      entry_id
     )
+    .then(del => res.status(204).end())
+    .catch(next)
+  })
+  .patch(bodyParser, (req, res, next) => {
+    const {entry_id} = req.params
+    const { title, content, duration, mood_type } = req.body;
+    const newEntryField = { title, content, duration, mood_type };
+
+    const numOfVals = Object.values(newEntryField).filter(Boolean).length;
+    if (numOfVals === 0) {
+      return res
+        .status(400)
+        .json({error: {
+          message: `Request body must contain 'title', 'content', 'duration', or 'mood_type"`
+        }})
+    }
+    EntriesService.updateEntry(db, entry_id, newEntryField)
       .then(() => res.status(204).end())
       .catch(next)
   })

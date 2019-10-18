@@ -39,6 +39,13 @@ const EntriesService = {
       .first()
   },
 
+  getEntryByUserId(db, userId) {
+    return db
+      .select('*')
+      .from('mood_entries')
+      .where('user_id', userId)
+  },
+
   getCommentsForEntries(db, entry_id) {
     return db
       .from('mood_comments AS coms')
@@ -58,10 +65,10 @@ const EntriesService = {
       .groupBy('coms.id', 'user.id')
   },
 
-  deleteEntry(db, entry_id) {
+  deleteEntry(db, id) {
     return db
       .from('mood_entries')
-      .where({ entry_id })
+      .where({ id })
       .delete()
   },
 
@@ -73,10 +80,20 @@ const EntriesService = {
       .then(row => row[0])
   },
 
-  serializeEntries(entry) {
-    return entry.map(this.serializeEntry)
+  updateEntry(db, id, newEntryField) {
+    return db
+      .from('mood_entries')
+      .where({ id })
+      .update(newEntryField)
   },
 
+  serializeEntries(entry) {
+    console.log(entry)
+    // return entry.map(this.serializeEntry)
+    return entry
+  },
+
+//changed to user_id, if breaking, change back to user
   serializeEntry(entry) {
     const entryTree = new Treeize();
 
@@ -98,7 +115,7 @@ const EntriesService = {
   serializeEntryComments(comments) {
     return comments.map(this.serializeEntryComment)
   },
-
+//changed to user_id, if breaking, change back to user
   serializeEntryComment(comment) {
     const commentTree = new Treeize();
 
