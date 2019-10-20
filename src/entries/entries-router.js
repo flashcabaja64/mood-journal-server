@@ -56,13 +56,14 @@ entriesRouter
       req.app.get('db'),
       entry_id
     )
-    .then(del => res.status(204).end())
+    .then(() => res.status(204).end())
     .catch(next)
   })
   .patch(bodyParser, (req, res, next) => {
-    const {entry_id} = req.params
-    const { title, content, duration, mood_type } = req.body;
-    const newEntryField = { title, content, duration, mood_type };
+    const {entry_id} = req.params;
+    const { user_id, title, content, duration, mood_type } = req.body;
+    const newEntryField = { user_id, title, content, duration, mood_type };
+    const db = req.app.get('db');
 
     const numOfVals = Object.values(newEntryField).filter(Boolean).length;
     if (numOfVals === 0) {
