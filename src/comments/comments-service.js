@@ -6,7 +6,6 @@ const CommentsService = {
       .from('mood_comments AS coms')
       .select(
         'coms.id',
-        'coms.rating',
         'coms.text',
         'coms.date_created',
         'coms.mood_entries',
@@ -48,7 +47,6 @@ const CommentsService = {
     return {
       id: comment.id,
       text: xss(comment.text),
-      rating: comment.rating,
       date_created: comment.date_created,
       user: comment.user || {},
     }

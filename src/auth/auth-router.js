@@ -11,7 +11,7 @@ authRouter
 
     for (const [key, value] of Object.entries(loginUser)) {
       if (value == null) {
-        res.status(401).json({ error: `Missing '${key}' in the request body` })
+        res.status(400).json({ error: `Missing '${key}' in the request body` })
       }
     }
 
@@ -28,7 +28,7 @@ authRouter
         return AuthService.comparePasswords(loginUser.password, dbUser.password)
           .then(compareMatch => {
             if (!compareMatch) {
-              return res.status(400).status({
+              return res.status(400).json({
                 error: 'Incorrect user_name or password',
               })
             }
@@ -36,7 +36,7 @@ authRouter
             const payload = { user_id: dbUser.id }
             res.send({
               authToken: AuthService.createJwt(sub, payload),
-              user: {user_id: dbUser.id, user_name: dbUser.user_name }
+              user: { user_id: dbUser.id, user_name: dbUser.user_name }
             })
           })
       })

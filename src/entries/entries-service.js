@@ -13,12 +13,12 @@ const EntriesService = {
         'entry.mood_type',
         'entry.date_created',
         ...userFields,
-        db.raw(
-          `count(DISTINCT coms) AS num_of_comments`
-        ),
-        db.raw(
-          `AVG(coms.rating) as avg_comment_rating`
-        ),
+        // db.raw(
+        //   `count(DISTINCT coms) AS num_of_comments`
+        // ),
+        // db.raw(
+        //   `AVG(coms.rating) as avg_comment_rating`
+        // ),
       )
       .leftJoin(
         'mood_comments AS coms',
@@ -52,7 +52,6 @@ const EntriesService = {
       .select(
         'coms.id',
         'coms.text',
-        'coms.rating',
         'coms.date_created',
         ...userFields,
       )
@@ -89,7 +88,7 @@ const EntriesService = {
 
   serializeEntries(entry) {
     console.log(entry)
-    // return entry.map(this.serializeEntry)
+    //return entry.map(this.serializeEntry)
     return entry
   },
 
@@ -103,12 +102,12 @@ const EntriesService = {
       id: entryData.id,
       title: xss(entryData.title),
       content: xss(entryData.content),
-      duration: entryData.duration,
+      duration: Number(entryData.duration),
       mood_type: xss(entryData.mood_type),
       date_created: entryData.date_created,
       user: entryData.user || {},
-      num_of_comments: Number(entryData.num_of_comments) || 0,
-      avg_comment_rating: Math.round(entryData.avg_comment_rating) || 0
+      // num_of_comments: Number(entryData.num_of_comments) || 0,
+      // avg_comment_rating: Math.round(entryData.avg_comment_rating) || 0
     }
   },
 
@@ -124,7 +123,6 @@ const EntriesService = {
     return {
       id: commentData.id,
       text: xss(commentData.text),
-      rating: commentData.rating,
       date_created: commentData.date_created,
       user: commentData.user || {},
       entry_id: commentData.entry_id,

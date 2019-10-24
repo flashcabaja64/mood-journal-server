@@ -11,6 +11,10 @@ const bodyParser = express.json();
 entriesRouter
   .route('/')
   .get(requireAuth, (req, res, next) => {
+    // EntriesService.getAllEntries(req.app.get('db'))
+    //   .then(entry => {
+    //     res.json(EntriesService.serializeEntries(entry))
+    //   })
     EntriesService.getEntryByUserId(req.app.get('db'), req.user.id)
       .then(entry => {
         res.status(200).json(entry)
@@ -50,8 +54,9 @@ entriesRouter
   .get((req, res, next) => {
     res.json(EntriesService.serializeEntry(res.entry))
   })
-  .delete((req, res, next) => {
+  .delete(bodyParser, (req, res, next) => {
     const { entry_id } = req.params
+    console.log(entry_id)
     EntriesService.deleteEntry(
       req.app.get('db'),
       entry_id

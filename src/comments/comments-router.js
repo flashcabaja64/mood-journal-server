@@ -9,8 +9,8 @@ const bodyParser = express.json();
 commentsRouter
   .route('/')
   .post(requireAuth, bodyParser, (req, res, next) => {
-    const { rating, entry_id, text } = req.body;
-    const newComment = { rating, entry_id, text, entry_id: req.user.id};
+    const { text, entry_id, user_id } = req.body;
+    const newComment = { text, entry_id, user_id};
 
     for (const [key, value] of Object.entries(newComment)) {
       if (value == null) {
@@ -20,7 +20,7 @@ commentsRouter
       }
     }
 
-    newReview.user_id = req.user_id
+    //newReview.user_id = req.user_id
 
     CommentsService.insertComment(
       req.app.get('db'),
