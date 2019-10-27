@@ -29,8 +29,9 @@ describe('Users Endpoints', () => {
 
   describe('POST /api/users/', () => {
     beforeEach('insert entries', () =>
-      helpers.seedEntriesTable(
+      helpers.seedEntriesTables(
         db,
+        testUsers,
         testEntries,
         testComments,
       )
@@ -78,7 +79,7 @@ describe('Users Endpoints', () => {
       return supertest(app)
         .post('/api/users')
         .send(newUser)
-        .expect(400, {error: 'Password must be at least 8 characters'});
+        .expect(400, {error: 'Password must be longer than 8 characters'});
     });
 
     it('responds with 400 when password is longer than 72 characters', () => {
@@ -102,14 +103,14 @@ describe('Users Endpoints', () => {
       return supertest(app)
         .post('/api/users')
         .send(newUser)
-        .expect(400, {error: 'Password must contain at least one upper case, lower case, and number character'});
+        .expect(400, {error: 'Password must contain 1 upper case, lower case, number, and special character'});
     });
 
     it('respond with 400 when username is submitted that already exists', () => {
       const existingUser = {
         full_name: 'Test User',
         user_name: testUser.user_name,
-        password: 'Ab123456'
+        password: 'Ab123456!'
       };
       return supertest(app)
         .post('/api/users')
@@ -121,7 +122,7 @@ describe('Users Endpoints', () => {
       const newUser = {
         user_name: 'test-user',
         full_name: 'Test User',
-        password: 'Ab123456'
+        password: 'Ab123456!'
       };
 
       return supertest(app)
@@ -146,13 +147,13 @@ describe('Users Endpoints', () => {
       const maliciousUser = {
         full_name: 'Naughty naughty very naughty <script>alert("xss");</script>',
         user_name: 'Naughty naughty very naughty <script>alert("xss");</script>',
-        password: 'Naughty1 naughty very naughty <script>alert("xss");</script>'
+        password: 'Naughty1! naughty very naughty <script>alert("xss");</script>'
       };
 
       const expectedUser = {
         full_name: `Naughty naughty very naughty &lt;script&gt;alert(\"xss\");&lt;/script&gt;`,
         user_name: `Naughty naughty very naughty &lt;script&gt;alert(\"xss\");&lt;/script&gt;`,
-        password: `Naughty1 naughty very naughty &lt;script&gt;alert(\"xss\");&lt;/script&gt;`
+        password: `Naughty1! naughty very naughty &lt;script&gt;alert(\"xss\");&lt;/script&gt;`
       };
 
       return supertest(app)

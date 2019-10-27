@@ -12,7 +12,9 @@
     "migrate": "postgrator --config postgrator-config.js"
   },
   "keywords": [],
-  "engines": {},
+  "engines": {
+    "node": "10.16.3"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
