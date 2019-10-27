@@ -113,12 +113,10 @@ function makeExpectedEntry(users, entry) {
     duration: entry.duration,
     mood_type: entry.mood_type,
     date_created: entry.date_created,
-    //user_id: user.id,
     user: {
       id: user.id,
       user_name: user.user_name,
       full_name: user.full_name,
-      //password: user.password,
       nickname: user.nickname,
       date_created: user.date_created,
     },
@@ -135,13 +133,10 @@ function makeExpectedEntryComments(users, entryId, comments) {
       id: coms.id,
       text: coms.text,
       date_created: coms.date_created,
-      //entry_id: coms.entry_id,
-      //user_id: coms.user_id,
       user: {
         id: commentsUser.id,
         user_name: commentsUser.user_name,
         full_name: commentsUser.full_name,
-        //password: commentsUser.password,
         nickname: commentsUser.nickname,
         date_created: commentsUser.date_created,
       }

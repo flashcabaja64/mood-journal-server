@@ -13,12 +13,6 @@ const EntriesService = {
         'entry.mood_type',
         'entry.date_created',
         ...userFields,
-        // db.raw(
-        //   `count(DISTINCT coms) AS num_of_comments`
-        // ),
-        // db.raw(
-        //   `AVG(coms.rating) as avg_comment_rating`
-        // ),
       )
       .leftJoin(
         'mood_comments AS coms',
@@ -87,12 +81,9 @@ const EntriesService = {
   },
 
   serializeEntries(entry) {
-    console.log(entry)
-    //return entry.map(this.serializeEntry)
     return entry
   },
 
-//changed to user_id, if breaking, change back to user
   serializeEntry(entry) {
     const entryTree = new Treeize();
 
@@ -106,15 +97,13 @@ const EntriesService = {
       mood_type: xss(entryData.mood_type),
       date_created: entryData.date_created,
       user: entryData.user || {},
-      // num_of_comments: Number(entryData.num_of_comments) || 0,
-      // avg_comment_rating: Math.round(entryData.avg_comment_rating) || 0
     }
   },
 
   serializeEntryComments(comments) {
     return comments.map(this.serializeEntryComment)
   },
-//changed to user_id, if breaking, change back to user
+
   serializeEntryComment(comment) {
     const commentTree = new Treeize();
 
@@ -124,11 +113,10 @@ const EntriesService = {
       id: commentData.id,
       text: xss(commentData.text),
       date_created: commentData.date_created,
-      user: commentData.user || {},
       entry_id: commentData.entry_id,
+      user: commentData.user || {},
     }
   },
-
 }
 
 const userFields = [

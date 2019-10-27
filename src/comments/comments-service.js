@@ -8,7 +8,7 @@ const CommentsService = {
         'coms.id',
         'coms.text',
         'coms.date_created',
-        'coms.mood_entries',
+        'coms.entry_id',
         db.raw(
           `row_to_json(
             (SELECT temp FROM (
@@ -25,7 +25,7 @@ const CommentsService = {
       )
       .leftJoin(
         'mood_users AS user',
-        'coms.entry_id',
+        'coms.user_id',
         'user.id'
       )
       .where('coms.id', id)
@@ -48,6 +48,7 @@ const CommentsService = {
       id: comment.id,
       text: xss(comment.text),
       date_created: comment.date_created,
+      entry_id: comment.entry_id,
       user: comment.user || {},
     }
   }

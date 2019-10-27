@@ -9,8 +9,7 @@
     "dev": "nodemon src/server",
     "predeploy": "npm audit --fix",
     "deploy": "git push heroku master",
-    "migrate": "postgrator --config postgrator-config.js",
-    "migrate:test": "set NODE_ENV=test&& npm run migrate"
+    "migrate": "postgrator --config postgrator-config.js"
   },
   "keywords": [],
   "engines": {},

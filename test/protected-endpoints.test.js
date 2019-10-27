@@ -12,7 +12,6 @@ describe.skip('Protected Endpoints', () => {
   } = helpers.makeEntriesFixtures()
 
   before('make knex instance', () => {
-    console.log(process.env.NODE_ENV)
     db = knex({
       client: 'pg',
       connection: process.env.TEST_DATABASE_URL,

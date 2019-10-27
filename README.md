@@ -1,12 +1,19 @@
-# Express Boilerplate!
+# Mood Journal Server
 
-This is a boilerplate project used for starting new projects!
+This API server is the complement of my Mood Journal Client. This server is setup to return all entries of the user's data. This can add, delete, and edit entries in the API server.
+
+## Endpoints
+
+/api/entries returns all the entries the user has created in the client
+/api/entries/:entry_id returns a specific entry in the server
+
+Link to the client repo: https://github.com/flashcabaja64/mood-journal-client
 
 ## Set up
 
 Complete the following steps to start a new project (NEW-PROJECT-NAME):
 
-1. Clone this repository to your local machine `git clone BOILERPLATE-URL NEW-PROJECTS-NAME`
+1. Clone this repository to your local machine `https://github.com/flashcabaja64/mood-journal-server NEW-PROJECT-NAME`
 2. `cd` into the cloned repository
 3. Make a fresh start of the git history for this project with `rm -rf .git && git init`
 4. Install the node dependencies `npm install`

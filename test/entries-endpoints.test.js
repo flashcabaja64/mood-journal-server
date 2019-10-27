@@ -14,7 +14,6 @@ describe.skip('Entries Endpoints', function() {
   const testUser = testUsers[0]
 
   before('make knex instance', () => {
-    console.log(process.env.NODE_ENV)
     db = knex({
       client: 'pg',
       connection: process.env.TEST_DATABASE_URL,

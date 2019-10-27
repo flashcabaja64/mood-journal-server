@@ -6,15 +6,9 @@ const { requireAuth } = require('../middleware/jwt-auth');
 const entriesRouter = express.Router();
 const bodyParser = express.json();
 
-// get all data from DB
-//validation on the POST request
 entriesRouter
   .route('/')
   .get(requireAuth, (req, res, next) => {
-    // EntriesService.getAllEntries(req.app.get('db'))
-    //   .then(entry => {
-    //     res.json(EntriesService.serializeEntries(entry))
-    //   })
     EntriesService.getEntryByUserId(req.app.get('db'), req.user.id)
       .then(entry => {
         res.status(200).json(entry)
@@ -22,7 +16,6 @@ entriesRouter
       .catch(next)
   })
   .post(bodyParser, (req, res, next) => {
-    console.log(req.body)
 
     const { user_id, title, content, duration, mood_type } = req.body
     const newEntry = { user_id, title, content, duration, mood_type }
@@ -46,7 +39,6 @@ entriesRouter
     .catch(next)
   })
 
-// Check entry id
 entriesRouter
   .route('/:entry_id')
   .all(requireAuth)
@@ -56,7 +48,6 @@ entriesRouter
   })
   .delete(bodyParser, (req, res, next) => {
     const { entry_id } = req.params
-    console.log(entry_id)
     EntriesService.deleteEntry(
       req.app.get('db'),
       entry_id
@@ -98,7 +89,6 @@ entriesRouter
       .catch(next)
   })
 
-//
 async function checkEntryExists(req, res, next) {
   try {
     const entry = await EntriesService.getById(
